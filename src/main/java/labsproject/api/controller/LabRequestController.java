@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import labsproject.api.entity.LabRequest;
+import labsproject.api.entity.User;
+import labsproject.api.feign.UserFeign;
 import labsproject.api.service.ILabRequestService;
 
 @RestController
@@ -32,6 +35,14 @@ public class LabRequestController {
 		return labRequestService.getById(id);
 	}
 	
+	@Autowired
+	private UserFeign userFeign; 
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = {"application/json"}, produces ="application/json")
+	public User login(@RequestBody Map<String, Object> payload) {	
+		User user = userFeign.login(payload);	
+		return user;
+	}
 	@PostMapping(path="/add", consumes = {"application/json"})
 	public @ResponseBody String Insert (@RequestBody Map<String, Object> json) {
 		try {
