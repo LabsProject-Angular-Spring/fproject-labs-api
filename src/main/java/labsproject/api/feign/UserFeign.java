@@ -14,16 +14,10 @@ import feign.form.spring.SpringFormEncoder;
 
 import labsproject.api.entity.User;
 
-@FeignClient(name = "user-api", url = "localhost:10020")
+@FeignClient(name = "user-api", url = "http://localhost:10020")
 
 public interface UserFeign {
-    @PostMapping(value = "/user/login", consumes = {"application/json"} )
+    @PostMapping(value = "/user/login", consumes = {"application/json"}, produces = {"application/json"} )
     User login(@RequestBody Map<String, Object> payload);
-    
-    class Configuration {
-        @Bean
-        SpringFormEncoder feignFormEncoder(ObjectFactory<HttpMessageConverters> converters) {
-            return new SpringFormEncoder(new SpringEncoder(converters));
-        }
-    }
+
 }

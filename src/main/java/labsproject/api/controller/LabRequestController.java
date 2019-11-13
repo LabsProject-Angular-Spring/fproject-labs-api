@@ -4,6 +4,7 @@ package labsproject.api.controller;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,8 @@ import labsproject.api.feign.UserFeign;
 import labsproject.api.service.ILabRequestService;
 
 @RestController
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT})
+
 @RequestMapping(path="/labrequest")
 public class LabRequestController {
 	
@@ -38,7 +41,7 @@ public class LabRequestController {
 	@Autowired
 	private UserFeign userFeign; 
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = {"application/json"}, produces ="application/json")
+	@PostMapping(value = "/login", consumes = {"application/json"}, produces ="application/json")
 	public User login(@RequestBody Map<String, Object> payload) {	
 		User user = userFeign.login(payload);	
 		return user;
@@ -60,6 +63,7 @@ public class LabRequestController {
 			labRequest.usemachines=Boolean.parseBoolean(json.get("usemachines").toString());
 			labRequest.useconsume=Boolean.parseBoolean(json.get("useconsume").toString());
 			labRequest.guide=Boolean.parseBoolean(json.get("guide").toString());
+			labRequest.status = Integer.parseInt((json.get("status").toString()));
 			labRequestService.Insert(labRequest);
 			return "Saved";	
 		}
@@ -84,7 +88,9 @@ public class LabRequestController {
 			labRequest.usemachines=Boolean.parseBoolean(json.get("usemachines").toString());
 			labRequest.useconsume=Boolean.parseBoolean(json.get("useconsume").toString());
 			labRequest.guide=Boolean.parseBoolean(json.get("guide").toString());
+			labRequest.status = Integer.parseInt((json.get("status").toString()));
 			labRequestService.Update(labRequest,id);
+			
 			return "Saved";	
 		}
 		catch(Exception ex){

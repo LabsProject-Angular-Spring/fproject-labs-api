@@ -17,6 +17,7 @@ public class LabRequest{
     public Long facultyid;	
     public Integer students;	
     public Integer cantmachines;	
+    public Integer status;
     public Integer cantconsume;	
     public String observation;	
     public Boolean usemachines;
