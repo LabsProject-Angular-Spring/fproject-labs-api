@@ -1,5 +1,8 @@
 package labsproject.api.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,18 @@ public class LabRequestService implements ILabRequestService{
 	public LabRequest Update(LabRequest labRequest, String id) {		
 		labRequest.id=id;
 		return labRequestRepository.save(labRequest);
+	}
+	
+	@Override
+	public List<LabRequest> getByUser(Long id){
+		List<LabRequest> UserLabs = new ArrayList<LabRequest>();
+		List<LabRequest> AllLabs = labRequestRepository.findAll();
+		for(LabRequest Lab: AllLabs) {
+			if(Lab.teacherid == id) {
+				UserLabs.add(Lab);
+			}
+		}
+		return UserLabs;
 	}
 
 }

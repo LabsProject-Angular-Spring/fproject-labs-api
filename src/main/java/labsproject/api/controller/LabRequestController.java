@@ -33,6 +33,11 @@ public class LabRequestController {
 		return labRequestService.getAllList();
 	}
 	
+	@GetMapping("/userlist/{id}")
+	public Iterable<LabRequest> getUserList(@PathVariable Long id){
+		return labRequestService.getByUser(id);
+	}
+	
 	@GetMapping("/{id}")
 	public LabRequest getById(@PathVariable String id) {
 		return labRequestService.getById(id);
