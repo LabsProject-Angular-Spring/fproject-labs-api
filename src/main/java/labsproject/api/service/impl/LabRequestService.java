@@ -43,7 +43,7 @@ public class LabRequestService implements ILabRequestService{
 		List<LabRequest> UserLabs = new ArrayList<LabRequest>();
 		List<LabRequest> AllLabs = labRequestRepository.findAll();
 		for(LabRequest Lab: AllLabs) {
-			if(Lab.teacherid == id) {
+			if(Lab.iduser.toString().equals(id.toString())) {
 				UserLabs.add(Lab);
 			}
 		}

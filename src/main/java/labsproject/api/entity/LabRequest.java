@@ -8,8 +8,9 @@ public class LabRequest{
 
 	@Id
     public String id;
-
+	public String iduser;
     public Date date;
+    public Date datetime;
     public String name;	
     public Long labid;	
     public String asign;	

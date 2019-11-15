@@ -2,6 +2,7 @@ package labsproject.api.controller;
 
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,8 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import labsproject.api.entity.Building;
+import labsproject.api.entity.Faculty;
 import labsproject.api.entity.LabRequest;
 import labsproject.api.entity.User;
+import labsproject.api.feign.BuildingFeign;
+import labsproject.api.feign.TeacherFeign;
+import labsproject.api.feign.FacultyFeign;
 import labsproject.api.feign.UserFeign;
 import labsproject.api.service.ILabRequestService;
 
@@ -27,7 +34,7 @@ public class LabRequestController {
 	
 	@Autowired
 	private ILabRequestService labRequestService;
-	
+		
 	@GetMapping("/list")
 	public Iterable<LabRequest> getList(){
 		return labRequestService.getAllList();
@@ -45,6 +52,28 @@ public class LabRequestController {
 	
 	@Autowired
 	private UserFeign userFeign; 
+	@Autowired
+	private BuildingFeign buildingFeign;
+	@Autowired
+	private TeacherFeign teacherFeign;
+
+	@Autowired
+	private FacultyFeign faculty;
+	
+	@GetMapping(value = "/faculty", consumes = {"application/json"}, produces ="application/json")
+	public List<Faculty> listFaculty() {	
+		return faculty.getList();
+	}
+	
+	@GetMapping(value = "/teacher", consumes = {"application/json"}, produces ="application/json")
+	public List<User> listUser() {	
+		return teacherFeign.getList();
+	}
+		
+	@GetMapping(value = "/building", consumes = {"application/json"}, produces ="application/json")
+	public List<Building> list() {	
+		return buildingFeign.getList();
+	}
 	
 	@PostMapping(value = "/login", consumes = {"application/json"}, produces ="application/json")
 	public User login(@RequestBody Map<String, Object> payload) {	
@@ -55,8 +84,10 @@ public class LabRequestController {
 	public @ResponseBody String Insert (@RequestBody Map<String, Object> json) {
 		try {
 			LabRequest labRequest = new LabRequest();
-			labRequest.date=new SimpleDateFormat("yyyy-MM-dd HH:mm").parse (json.get("date").toString());
+			labRequest.date=new SimpleDateFormat("yyyy-MM-dd").parse (json.get("date").toString());
+			labRequest.datetime=new SimpleDateFormat("hh:mm").parse (json.get("datetime").toString());
 			labRequest.name=(json.get("name").toString());
+			labRequest.iduser = (json.get("iduser").toString());
 			labRequest.labid=Long.parseLong(json.get("labid").toString());
 			labRequest.asign=(json.get("asign").toString());
 			labRequest.teacherid=Long.parseLong(json.get("teacherid").toString());
@@ -81,6 +112,7 @@ public class LabRequestController {
 		try {
 			LabRequest labRequest = new LabRequest();
 			labRequest.date=new SimpleDateFormat("yyyy-MM-dd").parse (json.get("date").toString());
+			labRequest.datetime=new SimpleDateFormat("hh:mm").parse (json.get("datetime").toString());
 			labRequest.name=(json.get("name").toString());
 			labRequest.labid=Long.parseLong(json.get("labid").toString());
 			labRequest.asign=(json.get("asign").toString());
@@ -93,6 +125,7 @@ public class LabRequestController {
 			labRequest.usemachines=Boolean.parseBoolean(json.get("usemachines").toString());
 			labRequest.useconsume=Boolean.parseBoolean(json.get("useconsume").toString());
 			labRequest.guide=Boolean.parseBoolean(json.get("guide").toString());
+			labRequest.iduser = (json.get("iduser").toString());
 			labRequest.status = Integer.parseInt((json.get("status").toString()));
 			labRequestService.Update(labRequest,id);
 			
