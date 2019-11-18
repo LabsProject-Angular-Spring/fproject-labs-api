@@ -20,10 +20,6 @@ import labsproject.api.entity.Building;
 import labsproject.api.entity.Faculty;
 import labsproject.api.entity.LabRequest;
 import labsproject.api.entity.User;
-import labsproject.api.feign.BuildingFeign;
-import labsproject.api.feign.TeacherFeign;
-import labsproject.api.feign.FacultyFeign;
-import labsproject.api.feign.UserFeign;
 import labsproject.api.service.ILabRequestService;
 
 @RestController
@@ -48,38 +44,8 @@ public class LabRequestController {
 	@GetMapping("/{id}")
 	public LabRequest getById(@PathVariable String id) {
 		return labRequestService.getById(id);
-	}
+	}	
 	
-	@Autowired
-	private UserFeign userFeign; 
-	@Autowired
-	private BuildingFeign buildingFeign;
-	@Autowired
-	private TeacherFeign teacherFeign;
-
-	@Autowired
-	private FacultyFeign faculty;
-	
-	@GetMapping(value = "/faculty", consumes = {"application/json"}, produces ="application/json")
-	public List<Faculty> listFaculty() {	
-		return faculty.getList();
-	}
-	
-	@GetMapping(value = "/teacher", consumes = {"application/json"}, produces ="application/json")
-	public List<User> listUser() {	
-		return teacherFeign.getList();
-	}
-		
-	@GetMapping(value = "/building", consumes = {"application/json"}, produces ="application/json")
-	public List<Building> list() {	
-		return buildingFeign.getList();
-	}
-	
-	@PostMapping(value = "/login", consumes = {"application/json"}, produces ="application/json")
-	public User login(@RequestBody Map<String, Object> payload) {	
-		User user = userFeign.login(payload);	
-		return user;
-	}
 	@PostMapping(path="/add", consumes = {"application/json"})
 	public @ResponseBody String Insert (@RequestBody Map<String, Object> json) {
 		try {
